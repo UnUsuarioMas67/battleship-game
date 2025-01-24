@@ -123,4 +123,12 @@ class Gameboard {
   }
 }
 
-export { Ship, Gameboard };
+class Player {
+  #gameboard = new Gameboard();
+
+  get gameboard() {
+    return this.#gameboard;
+  }
+}
+
+export { Ship, Gameboard, Player };
