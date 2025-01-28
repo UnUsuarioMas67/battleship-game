@@ -10,11 +10,6 @@ describe("Ship", () => {
     expect(ship2.length).toBe(5);
   });
 
-  test("isVertical returns the proper value", () => {
-    expect(ship1.isVertical).toBe(false);
-    expect(ship2.isVertical).toBe(true);
-  });
-
   test("takes damage and is sunk when the amount of hits equals length", () => {
     // takes 3 hits to sink
     ship1.hit();
@@ -34,18 +29,20 @@ describe("Gameboard", () => {
 
   describe("placeShip()", () => {
     test("can place a ship on specific coordinates", () => {
-      const ship1 = new Ship(3);
-      const ship2 = new Ship(5, true);
+      const ship = new Ship(3);
 
-      gameboard.placeShip(ship1, 3, 5);
+      gameboard.placeShip(ship, 3, 5);
       expect(gameboard.shipList).toContainEqual({
-        ship: ship1,
+        ship: ship,
         pos: { x: 3, y: 5 },
       });
+    });
 
-      gameboard.placeShip(ship2, 0, 2);
+    test("works with vertical ships", () => {
+      const ship = new Ship(5, true);
+      gameboard.placeShip(ship, 0, 2);
       expect(gameboard.shipList).toContainEqual({
-        ship: ship2,
+        ship: ship,
         pos: { x: 0, y: 2 },
       });
     });

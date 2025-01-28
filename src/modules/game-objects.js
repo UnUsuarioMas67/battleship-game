@@ -1,19 +1,14 @@
 class Ship {
   #hits = 0;
-  #vertical;
   #length;
 
   constructor(length, vertical = false) {
     this.#length = length;
-    this.#vertical = vertical;
+    this.vertical = vertical;
   }
 
   get length() {
     return this.#length;
-  }
-
-  get isVertical() {
-    return this.#vertical;
   }
 
   hit() {
@@ -111,7 +106,7 @@ class Gameboard {
   }
 
   #forEachShipCell(ship, x, y, fn) {
-    if (ship.isVertical) {
+    if (ship.vertical) {
       for (let i = y; i < ship.length + y; i++) {
         fn(x, i);
       }
