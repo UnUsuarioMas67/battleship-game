@@ -56,6 +56,17 @@ class Gameboard {
     this.#shipList.push({ ship, pos: { x, y } });
   }
 
+  isPlacementValid(ship, x, y) {
+    let result = true;
+
+    this.#forEachShipCell(ship, x, y, (px, py) => {
+      if (!Gameboard.#isValidCell(px, py) || this.isOccupied(px, py))
+        result = false;
+    });
+
+    return result;
+  }
+
   isOccupied(x, y) {
     if (!Gameboard.#isValidCell(x, y)) return null;
 

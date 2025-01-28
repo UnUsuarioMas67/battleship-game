@@ -74,6 +74,38 @@ describe("Gameboard", () => {
     });
   });
 
+  describe("isPlacementValid()", () => {
+    test("returns true is the placement is legal", () => {
+      const ship = new Ship(3);
+      expect(gameboard.isPlacementValid(ship, 3, 5)).toBe(true);
+    });
+
+    test("works with vertical ships", () => {
+      const ship = new Ship(5, true);
+      expect(gameboard.isPlacementValid(ship, 0, 2)).toBe(true);
+    });
+
+    test("returns false is the position is invalid", () => {
+      const ship = new Ship(2);
+      expect(gameboard.isPlacementValid(ship, 11, -5)).toBe(false);
+    });
+
+    test("returns false if the ship's length would extends outside the board", () => {
+      // horizontal ship
+      const ship1 = new Ship(3);
+      expect(gameboard.isPlacementValid(ship1, 8, 6)).toBe(false);
+
+      // vertical ship
+      const ship2 = new Ship(5, true);
+      expect(gameboard.isPlacementValid(ship2, 3, 7)).toBe(false);
+    });
+
+    test("returns false if the ship's length is larger than the board's size", () => {
+      const ship = new Ship(11);
+      expect(gameboard.isPlacementValid(ship, 0, 7)).toBe(false);
+    });
+  });
+
   describe("isOccupied()", () => {
     test("returns the ship at the given coordinates", () => {
       const ship = new Ship(3);
