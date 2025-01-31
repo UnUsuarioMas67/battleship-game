@@ -106,55 +106,55 @@ describe("Gameboard", () => {
     });
   });
 
-  describe("isOccupied()", () => {
+  describe("isCellOccupied()", () => {
     test("returns the ship at the given coordinates", () => {
       const ship = new Ship(3);
       gameboard.placeShip(ship, 4, 4);
 
-      expect(gameboard.isOccupied(4, 4)).toBe(ship);
-      expect(gameboard.isOccupied(5, 4)).toBe(ship);
-      expect(gameboard.isOccupied(6, 4)).toBe(ship);
+      expect(gameboard.isCellOccupied(4, 4)).toBe(ship);
+      expect(gameboard.isCellOccupied(5, 4)).toBe(ship);
+      expect(gameboard.isCellOccupied(6, 4)).toBe(ship);
     });
 
     test("returns null if coordinates are vacant", () => {
       const ship = new Ship(3);
       gameboard.placeShip(ship, 4, 4);
 
-      expect(gameboard.isOccupied(6, 4)).toBe(ship);
-      expect(gameboard.isOccupied(7, 4)).toBeNull();
+      expect(gameboard.isCellOccupied(6, 4)).toBe(ship);
+      expect(gameboard.isCellOccupied(7, 4)).toBeNull();
     });
 
     test("works with vertical ships", () => {
       const ship = new Ship(3, true);
       gameboard.placeShip(ship, 6, 2);
 
-      expect(gameboard.isOccupied(6, 2)).toBe(ship);
-      expect(gameboard.isOccupied(6, 3)).toBe(ship);
-      expect(gameboard.isOccupied(6, 4)).toBe(ship);
-      expect(gameboard.isOccupied(6, 5)).toBeNull();
+      expect(gameboard.isCellOccupied(6, 2)).toBe(ship);
+      expect(gameboard.isCellOccupied(6, 3)).toBe(ship);
+      expect(gameboard.isCellOccupied(6, 4)).toBe(ship);
+      expect(gameboard.isCellOccupied(6, 5)).toBeNull();
     });
 
     test("works with any length", () => {
       const ship1 = new Ship(2, true);
       gameboard.placeShip(ship1, 3, 4);
 
-      expect(gameboard.isOccupied(3, 4)).toBe(ship1);
-      expect(gameboard.isOccupied(3, 5)).toBe(ship1);
+      expect(gameboard.isCellOccupied(3, 4)).toBe(ship1);
+      expect(gameboard.isCellOccupied(3, 5)).toBe(ship1);
 
       const ship2 = new Ship(3);
       gameboard.placeShip(ship2, 2, 2);
 
-      expect(gameboard.isOccupied(2, 2)).toBe(ship2);
-      expect(gameboard.isOccupied(3, 2)).toBe(ship2);
-      expect(gameboard.isOccupied(4, 2)).toBe(ship2);
+      expect(gameboard.isCellOccupied(2, 2)).toBe(ship2);
+      expect(gameboard.isCellOccupied(3, 2)).toBe(ship2);
+      expect(gameboard.isCellOccupied(4, 2)).toBe(ship2);
 
       const ship3 = new Ship(4);
       gameboard.placeShip(ship3, 5, 7);
 
-      expect(gameboard.isOccupied(5, 7)).toBe(ship3);
-      expect(gameboard.isOccupied(6, 7)).toBe(ship3);
-      expect(gameboard.isOccupied(7, 7)).toBe(ship3);
-      expect(gameboard.isOccupied(8, 7)).toBe(ship3);
+      expect(gameboard.isCellOccupied(5, 7)).toBe(ship3);
+      expect(gameboard.isCellOccupied(6, 7)).toBe(ship3);
+      expect(gameboard.isCellOccupied(7, 7)).toBe(ship3);
+      expect(gameboard.isCellOccupied(8, 7)).toBe(ship3);
     });
   });
 

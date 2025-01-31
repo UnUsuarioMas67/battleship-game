@@ -49,7 +49,7 @@ class Gameboard {
     this.#forEachShipCell(ship, x, y, (px, py) => {
       if (!Gameboard.#isValidCell(px, py))
         throw new Error("Position is invalid");
-      if (this.isOccupied(px, py))
+      if (this.isCellOccupied(px, py))
         throw new Error("Position overlaps with another ship");
     });
 
@@ -60,14 +60,14 @@ class Gameboard {
     let result = true;
 
     this.#forEachShipCell(ship, x, y, (px, py) => {
-      if (!Gameboard.#isValidCell(px, py) || this.isOccupied(px, py))
+      if (!Gameboard.#isValidCell(px, py) || this.isCellOccupied(px, py))
         result = false;
     });
 
     return result;
   }
 
-  isOccupied(x, y) {
+  isCellOccupied(x, y) {
     if (!Gameboard.#isValidCell(x, y)) return null;
 
     for (let { ship, pos } of this.#shipList) {
@@ -94,7 +94,7 @@ class Gameboard {
 
     if (!Gameboard.#isValidCell(x, y)) return;
 
-    const ship = this.isOccupied(x, y);
+    const ship = this.isCellOccupied(x, y);
     if (ship) ship.hit();
 
     this.#hitCoords.push({ x, y });
