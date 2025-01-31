@@ -24,7 +24,7 @@ class Gameboard {
   #size = 10;
 
   #shipList = [];
-  #hitCoords = [];
+  #shotsReceived = [];
 
   constructor(size = 10) {
     this.#size = size;
@@ -39,8 +39,8 @@ class Gameboard {
     return structuredClone(this.#shipList);
   }
 
-  get hitCoords() {
-    return this.#hitCoords;
+  get shotsReceived() {
+    return this.#shotsReceived;
   }
 
   placeShip(ship, x, y) {
@@ -95,11 +95,11 @@ class Gameboard {
     const ship = this.isCellOccupied(x, y);
     if (ship) ship.hit();
 
-    this.#hitCoords.push({ x, y });
+    this.#shotsReceived.push({ x, y });
   }
 
   isCellAttacked(x, y) {
-    for (let coords of this.#hitCoords) {
+    for (let coords of this.#shotsReceived) {
       if (coords.x === x && coords.y === y) {
         return true;
       }

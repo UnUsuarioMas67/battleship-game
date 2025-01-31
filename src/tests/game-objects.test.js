@@ -171,13 +171,13 @@ describe("Gameboard", () => {
   describe("receiveAttack()", () => {
     test("records attack coordinates", () => {
       gameboard.receiveAttack(0, 0);
-      expect(gameboard.hitCoords).toContainEqual({ x: 0, y: 0 });
+      expect(gameboard.shotsReceived).toContainEqual({ x: 0, y: 0 });
 
       gameboard.receiveAttack(3, 3);
-      expect(gameboard.hitCoords).toContainEqual({ x: 3, y: 3 });
+      expect(gameboard.shotsReceived).toContainEqual({ x: 3, y: 3 });
 
       gameboard.receiveAttack(6, 6);
-      expect(gameboard.hitCoords).toContainEqual({ x: 6, y: 6 });
+      expect(gameboard.shotsReceived).toContainEqual({ x: 6, y: 6 });
     });
 
     test("cannot attack the same coordinates twice", () => {
@@ -189,7 +189,7 @@ describe("Gameboard", () => {
 
     test("ignores invalid coordinates", () => {
       gameboard.receiveAttack(-5, 3);
-      expect(gameboard.hitCoords).not.toContainEqual({ x: -5, y: 3 });
+      expect(gameboard.shotsReceived).not.toContainEqual({ x: -5, y: 3 });
     });
 
     test("can attack ships and sink them if all cells are hit", () => {
