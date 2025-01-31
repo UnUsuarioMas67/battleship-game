@@ -86,11 +86,8 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
-    for (let coords of this.#hitCoords) {
-      if (coords.x === x && coords.y === y) {
-        throw new Error("Attempted to hit the same coordinate twice");
-      }
-    }
+    if (this.isCellAttacked(x, y))
+      throw new Error("Attempted to hit the same coordinate twice");
 
     if (!Gameboard.#isValidCell(x, y)) return;
 
@@ -98,6 +95,16 @@ class Gameboard {
     if (ship) ship.hit();
 
     this.#hitCoords.push({ x, y });
+  }
+
+  isCellAttacked(x, y) {
+    for (let coords of this.#hitCoords) {
+      if (coords.x === x && coords.y === y) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   allShipsSunk() {
