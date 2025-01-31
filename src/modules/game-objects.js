@@ -21,14 +21,16 @@ class Ship {
 }
 
 class Gameboard {
-  static #size = 10;
+  #size = 10;
 
   #shipList = [];
   #hitCoords = [];
 
-  constructor() {}
+  constructor(size = 10) {
+    this.#size = size;
+  }
 
-  static get size() {
+  get size() {
     return this.#size;
   }
 
@@ -42,13 +44,12 @@ class Gameboard {
   }
 
   placeShip(ship, x, y) {
-    if (ship.length > Gameboard.size) {
+    if (ship.length > this.size) {
       throw new Error("Ship too large");
     }
 
     this.#forEachShipCell(ship, x, y, (px, py) => {
-      if (!Gameboard.#isValidCell(px, py))
-        throw new Error("Position is invalid");
+      if (!this.#isValidCell(px, py)) throw new Error("Position is invalid");
       if (this.isCellOccupied(px, py))
         throw new Error("Position overlaps with another ship");
     });
@@ -60,7 +61,7 @@ class Gameboard {
     let result = true;
 
     this.#forEachShipCell(ship, x, y, (px, py) => {
-      if (!Gameboard.#isValidCell(px, py) || this.isCellOccupied(px, py))
+      if (!this.#isValidCell(px, py) || this.isCellOccupied(px, py))
         result = false;
     });
 
@@ -68,7 +69,7 @@ class Gameboard {
   }
 
   isCellOccupied(x, y) {
-    if (!Gameboard.#isValidCell(x, y)) return null;
+    if (!this.#isValidCell(x, y)) return null;
 
     for (let { ship, pos } of this.#shipList) {
       let result = null;
@@ -89,7 +90,7 @@ class Gameboard {
     if (this.isCellAttacked(x, y))
       throw new Error("Attempted to hit the same coordinate twice");
 
-    if (!Gameboard.#isValidCell(x, y)) return;
+    if (!this.#isValidCell(x, y)) return;
 
     const ship = this.isCellOccupied(x, y);
     if (ship) ship.hit();
@@ -117,7 +118,7 @@ class Gameboard {
     return true;
   }
 
-  static #isValidCell(x, y) {
+  #isValidCell(x, y) {
     const validX = x >= 0 && x < this.#size;
     const validY = y >= 0 && y < this.#size;
     return validX && validY;
