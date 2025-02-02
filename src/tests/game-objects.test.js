@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from "@jest/globals";
-import { Ship, Gameboard } from "../modules/game-objects.js";
+import { Ship, Gameboard, Player } from "../modules/game-objects.js";
 
 describe("Ship", () => {
   const ship1 = new Ship(3);
@@ -225,5 +225,29 @@ describe("Gameboard", () => {
     test("returns false if there are no ships", () => {
       expect(gameboard.allShipsSunk()).toBe(false);
     });
+  });
+});
+
+describe.only("Player", () => {
+  let player;
+
+  beforeEach(() => {
+    player = new Player();
+  });
+
+  test("availableShips should contain exactly five ships with the expected values", () => {
+    const expected = [
+      new Ship(5),
+      new Ship(4),
+      new Ship(3),
+      new Ship(3),
+      new Ship(2),
+    ];
+
+    for (let i in player.availableShips) {
+      const receivedShip = player.availableShips[i];
+      const expectedShip = expected[i];
+      expect(receivedShip.length).toBe(expectedShip.length);
+    }
   });
 });
