@@ -1,26 +1,4 @@
-class Ship {
-  #hits = 0;
-  #length;
-
-  constructor(length, vertical = false) {
-    this.#length = length;
-    this.vertical = vertical;
-  }
-
-  get length() {
-    return this.#length;
-  }
-
-  hit() {
-    this.#hits++;
-  }
-
-  isSunk() {
-    return this.#hits >= this.#length;
-  }
-}
-
-class Gameboard {
+export class Gameboard {
   #size = 10;
 
   #shipList = [];
@@ -136,25 +114,3 @@ class Gameboard {
     }
   }
 }
-
-class Player {
-  gameboard = new Gameboard();
-
-  availableShips = [
-    new Ship(5),
-    new Ship(4),
-    new Ship(3),
-    new Ship(3),
-    new Ship(2),
-  ];
-
-  get placedShips() {
-    return this.gameboard.shipList.map((value) => value.ship);
-  }
-
-  placeShip() {}
-
-  getBoardCellsData() {}
-}
-
-export { Ship, Gameboard, Player };
