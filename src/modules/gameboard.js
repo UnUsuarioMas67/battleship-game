@@ -24,7 +24,7 @@ export class Gameboard {
         throw new Error("Position overlaps with another ship");
     });
 
-    this.shipsData.push({ ship, pos: coords });
+    this.shipsData.push({ ship, coords });
   }
 
   isPlacementValid(ship, coords) {
@@ -43,10 +43,10 @@ export class Gameboard {
 
     const [x, y] = coords;
 
-    for (let { ship, pos } of this.shipsData) {
+    for (let { ship, coords } of this.shipsData) {
       let result = null;
 
-      this.#forEachShipCell(ship, pos, ([cellX, cellY]) => {
+      this.#forEachShipCell(ship, coords, ([cellX, cellY]) => {
         if (cellX === x && cellY === y) {
           result = ship;
         }

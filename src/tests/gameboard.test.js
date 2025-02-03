@@ -13,7 +13,7 @@ describe("placeShip()", () => {
 
     expect(gameboard.shipsData).toContainEqual({
       ship: ship,
-      pos: [3, 5],
+      coords: [3, 5],
     });
   });
 
@@ -22,7 +22,7 @@ describe("placeShip()", () => {
     gameboard.placeShip(ship, [0, 2]);
     expect(gameboard.shipsData).toContainEqual({
       ship: ship,
-      pos: [0, 2],
+      coords: [0, 2],
     });
   });
 
