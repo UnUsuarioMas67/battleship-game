@@ -12,28 +12,38 @@ export class Gameboard {
     return this.#size;
   }
 
-  placeShip(ship, coords) {
+  placeShip(ship, coords, vertical = false) {
     if (ship.length > this.size) {
       throw new Error("Ship too large");
     }
 
-    this.#forEachShipCell(ship, coords, (cellCoords) => {
-      if (!this.#isValidCell(cellCoords))
-        throw new Error("Position is invalid");
-      if (this.isCellOccupied(cellCoords))
-        throw new Error("Position overlaps with another ship");
-    });
+    this.#forCellsInRange(
+      (cellCoords) => {
+        if (!this.#isValidCell(cellCoords))
+          throw new Error("Position is invalid");
+        if (this.isCellOccupied(cellCoords))
+          throw new Error("Position overlaps with another ship");
+      },
+      ship.length,
+      coords,
+      vertical,
+    );
 
-    this.shipsData.push({ ship, coords });
+    this.shipsData.push({ ship, coords, vertical });
   }
 
-  isPlacementValid(ship, coords) {
+  isPlacementValid(ship, coords, vertical) {
     let result = true;
 
-    this.#forEachShipCell(ship, coords, (cellCoords) => {
-      if (!this.#isValidCell(cellCoords) || this.isCellOccupied(cellCoords))
-        result = false;
-    });
+    this.#forCellsInRange(
+      (cellCoords) => {
+        if (!this.#isValidCell(cellCoords) || this.isCellOccupied(cellCoords))
+          result = false;
+      },
+      ship.length,
+      coords,
+      vertical,
+    );
 
     return result;
   }
@@ -43,14 +53,19 @@ export class Gameboard {
 
     const [x, y] = coords;
 
-    for (let { ship, coords } of this.shipsData) {
+    for (let { ship, coords, vertical } of this.shipsData) {
       let result = null;
 
-      this.#forEachShipCell(ship, coords, ([cellX, cellY]) => {
-        if (cellX === x && cellY === y) {
-          result = ship;
-        }
-      });
+      this.#forCellsInRange(
+        ([cellX, cellY]) => {
+          if (cellX === x && cellY === y) {
+            result = ship;
+          }
+        },
+        ship.length,
+        coords,
+        vertical,
+      );
 
       if (result) return result;
     }
@@ -99,15 +114,15 @@ export class Gameboard {
     return validX && validY;
   }
 
-  #forEachShipCell(ship, coords, fn) {
+  #forCellsInRange(fn, length, coords, vertical = false) {
     const [x, y] = coords;
 
-    if (ship.vertical) {
-      for (let i = y; i < ship.length + y; i++) {
+    if (vertical) {
+      for (let i = y; i < length + y; i++) {
         fn([x, i]);
       }
     } else {
-      for (let i = x; i < ship.length + x; i++) {
+      for (let i = x; i < length + x; i++) {
         fn([i, y]);
       }
     }

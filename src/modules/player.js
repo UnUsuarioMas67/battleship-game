@@ -16,7 +16,7 @@ export class Player {
     return this.#gameboard.shipsData.map((value) => value.ship);
   }
 
-  placeShip(shipIndex, coords) {
+  placeShip(shipIndex, coords, vertical) {
     if (shipIndex < 0 || shipIndex > 4) return false;
 
     const ship = this.availableShips[shipIndex];
@@ -26,7 +26,7 @@ export class Player {
     }
 
     try {
-      this.#gameboard.placeShip(ship, coords);
+      this.#gameboard.placeShip(ship, coords, vertical);
     } catch {
       return false;
     }

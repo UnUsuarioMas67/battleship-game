@@ -2,7 +2,7 @@ import { test, expect } from "@jest/globals";
 import { Ship } from "../modules/ship.js";
 
 const ship1 = new Ship(3);
-const ship2 = new Ship(5, true);
+const ship2 = new Ship(5);
 
 test("returns the correct length", () => {
   expect(ship1.length).toBe(3);

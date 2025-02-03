@@ -9,20 +9,34 @@ describe("placeShip()", () => {
   test("can place a ship on specific coordinates", () => {
     const ship = new Ship(3);
 
+    gameboard.placeShip(ship, [3, 5], false);
+
+    expect(gameboard.shipsData).toContainEqual({
+      ship: ship,
+      coords: [3, 5],
+      vertical: false,
+    });
+  });
+
+  test("works with vertical ships", () => {
+    const ship = new Ship(5);
+    gameboard.placeShip(ship, [0, 2], true);
+    expect(gameboard.shipsData).toContainEqual({
+      ship: ship,
+      coords: [0, 2],
+      vertical: true,
+    });
+  });
+
+  test("allow vertical argument to be omitted", () => {
+    const ship = new Ship(3);
+
     gameboard.placeShip(ship, [3, 5]);
 
     expect(gameboard.shipsData).toContainEqual({
       ship: ship,
       coords: [3, 5],
-    });
-  });
-
-  test("works with vertical ships", () => {
-    const ship = new Ship(5, true);
-    gameboard.placeShip(ship, [0, 2]);
-    expect(gameboard.shipsData).toContainEqual({
-      ship: ship,
-      coords: [0, 2],
+      vertical: false,
     });
   });
 
@@ -41,8 +55,8 @@ describe("placeShip()", () => {
     );
 
     // vertical ship
-    const ship2 = new Ship(5, true);
-    expect(() => gameboard.placeShip(ship2, [3, 7])).toThrow(
+    const ship2 = new Ship(5);
+    expect(() => gameboard.placeShip(ship2, [3, 7], true)).toThrow(
       "Position is invalid",
     );
   });
@@ -60,8 +74,8 @@ describe("isPlacementValid()", () => {
   });
 
   test("works with vertical ships", () => {
-    const ship = new Ship(5, true);
-    expect(gameboard.isPlacementValid(ship, [0, 2])).toBe(true);
+    const ship = new Ship(5);
+    expect(gameboard.isPlacementValid(ship, [0, 2], true)).toBe(true);
   });
 
   test("returns false is the position is invalid", () => {
@@ -75,8 +89,8 @@ describe("isPlacementValid()", () => {
     expect(gameboard.isPlacementValid(ship1, [8, 6])).toBe(false);
 
     // vertical ship
-    const ship2 = new Ship(5, true);
-    expect(gameboard.isPlacementValid(ship2, [3, 7])).toBe(false);
+    const ship2 = new Ship(5);
+    expect(gameboard.isPlacementValid(ship2, [3, 7], true)).toBe(false);
   });
 
   test("returns false if the ship's length is larger than the board's size", () => {
@@ -104,8 +118,8 @@ describe("isCellOccupied()", () => {
   });
 
   test("works with vertical ships", () => {
-    const ship = new Ship(3, true);
-    gameboard.placeShip(ship, [6, 2]);
+    const ship = new Ship(3);
+    gameboard.placeShip(ship, [6, 2], true);
 
     expect(gameboard.isCellOccupied([6, 2])).toBe(ship);
     expect(gameboard.isCellOccupied([6, 3])).toBe(ship);
@@ -114,8 +128,8 @@ describe("isCellOccupied()", () => {
   });
 
   test("works with any length", () => {
-    const ship1 = new Ship(2, true);
-    gameboard.placeShip(ship1, [3, 4]);
+    const ship1 = new Ship(2);
+    gameboard.placeShip(ship1, [3, 4], true);
 
     expect(gameboard.isCellOccupied([3, 4])).toBe(ship1);
     expect(gameboard.isCellOccupied([3, 5])).toBe(ship1);
@@ -141,8 +155,8 @@ test("cannot place ships on occupied positions", () => {
   const ship1 = new Ship(3);
   gameboard.placeShip(ship1, [5, 5]);
 
-  const ship2 = new Ship(5, true);
-  expect(() => gameboard.placeShip(ship2, [6, 3])).toThrow(
+  const ship2 = new Ship(5);
+  expect(() => gameboard.placeShip(ship2, [6, 3], true)).toThrow(
     "Position overlaps with another ship",
   );
 });
@@ -172,9 +186,9 @@ describe("receiveAttack()", () => {
   });
 
   test("can attack ships and sink them if all cells are hit", () => {
-    const ship = new Ship(3, true);
+    const ship = new Ship(3);
 
-    gameboard.placeShip(ship, [0, 0]);
+    gameboard.placeShip(ship, [0, 0], true);
     gameboard.receiveAttack([0, 0]);
     gameboard.receiveAttack([0, 1]);
     gameboard.receiveAttack([0, 2]);
@@ -185,8 +199,8 @@ describe("receiveAttack()", () => {
 
 describe("allShipsSunk()", () => {
   test("returns true if all ships are sunk", () => {
-    const ship1 = new Ship(3, true);
-    gameboard.placeShip(ship1, [0, 0]);
+    const ship1 = new Ship(3);
+    gameboard.placeShip(ship1, [0, 0], true);
     const ship2 = new Ship(3);
     gameboard.placeShip(ship2, [4, 2]);
 
