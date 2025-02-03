@@ -17,36 +17,37 @@ export class Gameboard {
       throw new Error("Ship too large");
     }
 
-    const [x, y] = coords;
-
-    this.#forEachShipCell(ship, x, y, (px, py) => {
-      if (!this.#isValidCell(px, py)) throw new Error("Position is invalid");
-      if (this.isCellOccupied(px, py))
+    this.#forEachShipCell(ship, coords, (cellCoords) => {
+      if (!this.#isValidCell(cellCoords))
+        throw new Error("Position is invalid");
+      if (this.isCellOccupied(cellCoords))
         throw new Error("Position overlaps with another ship");
     });
 
-    this.shipsData.push({ ship, pos: { x, y } });
+    this.shipsData.push({ ship, pos: coords });
   }
 
-  isPlacementValid(ship, x, y) {
+  isPlacementValid(ship, coords) {
     let result = true;
 
-    this.#forEachShipCell(ship, x, y, (px, py) => {
-      if (!this.#isValidCell(px, py) || this.isCellOccupied(px, py))
+    this.#forEachShipCell(ship, coords, (cellCoords) => {
+      if (!this.#isValidCell(cellCoords) || this.isCellOccupied(cellCoords))
         result = false;
     });
 
     return result;
   }
 
-  isCellOccupied(x, y) {
-    if (!this.#isValidCell(x, y)) return null;
+  isCellOccupied(coords) {
+    if (!this.#isValidCell(coords)) return null;
+
+    const [x, y] = coords;
 
     for (let { ship, pos } of this.shipsData) {
       let result = null;
 
-      this.#forEachShipCell(ship, pos.x, pos.y, (px, py) => {
-        if (px === x && py === y) {
+      this.#forEachShipCell(ship, pos, ([cellX, cellY]) => {
+        if (cellX === x && cellY === y) {
           result = ship;
         }
       });
@@ -57,21 +58,23 @@ export class Gameboard {
     return null;
   }
 
-  receiveAttack(x, y) {
-    if (this.isCellAttacked(x, y))
+  receiveAttack(coords) {
+    if (this.isCellAttacked(coords))
       throw new Error("Attempted to hit the same coordinate twice");
 
-    if (!this.#isValidCell(x, y)) return;
+    if (!this.#isValidCell(coords)) return;
 
-    const ship = this.isCellOccupied(x, y);
+    const ship = this.isCellOccupied(coords);
     if (ship) ship.hit();
 
-    this.shotsReceived.push({ x, y });
+    this.shotsReceived.push(coords);
   }
 
-  isCellAttacked(x, y) {
-    for (let coords of this.shotsReceived) {
-      if (coords.x === x && coords.y === y) {
+  isCellAttacked(coords) {
+    const [x, y] = coords;
+
+    for (let [shotX, shotY] of this.shotsReceived) {
+      if (shotX === x && shotY === y) {
         return true;
       }
     }
@@ -89,20 +92,23 @@ export class Gameboard {
     return true;
   }
 
-  #isValidCell(x, y) {
+  #isValidCell(coords) {
+    const [x, y] = coords;
     const validX = x >= 0 && x < this.#size;
     const validY = y >= 0 && y < this.#size;
     return validX && validY;
   }
 
-  #forEachShipCell(ship, x, y, fn) {
+  #forEachShipCell(ship, coords, fn) {
+    const [x, y] = coords;
+
     if (ship.vertical) {
       for (let i = y; i < ship.length + y; i++) {
-        fn(x, i);
+        fn([x, i]);
       }
     } else {
       for (let i = x; i < ship.length + x; i++) {
-        fn(i, y);
+        fn([i, y]);
       }
     }
   }
