@@ -1,8 +1,8 @@
 export class Gameboard {
   #size = 10;
 
-  #shipList = [];
-  #shotsReceived = [];
+  shipList = [];
+  shotsReceived = [];
 
   constructor(size = 10) {
     this.#size = size;
@@ -10,15 +10,6 @@ export class Gameboard {
 
   get size() {
     return this.#size;
-  }
-
-  get shipList() {
-    // returns a deep copy of ships
-    return structuredClone(this.#shipList);
-  }
-
-  get shotsReceived() {
-    return this.#shotsReceived;
   }
 
   placeShip(ship, x, y) {
@@ -32,7 +23,7 @@ export class Gameboard {
         throw new Error("Position overlaps with another ship");
     });
 
-    this.#shipList.push({ ship, pos: { x, y } });
+    this.shipList.push({ ship, pos: { x, y } });
   }
 
   isPlacementValid(ship, x, y) {
@@ -49,7 +40,7 @@ export class Gameboard {
   isCellOccupied(x, y) {
     if (!this.#isValidCell(x, y)) return null;
 
-    for (let { ship, pos } of this.#shipList) {
+    for (let { ship, pos } of this.shipList) {
       let result = null;
 
       this.#forEachShipCell(ship, pos.x, pos.y, (px, py) => {
@@ -73,11 +64,11 @@ export class Gameboard {
     const ship = this.isCellOccupied(x, y);
     if (ship) ship.hit();
 
-    this.#shotsReceived.push({ x, y });
+    this.shotsReceived.push({ x, y });
   }
 
   isCellAttacked(x, y) {
-    for (let coords of this.#shotsReceived) {
+    for (let coords of this.shotsReceived) {
       if (coords.x === x && coords.y === y) {
         return true;
       }
@@ -87,9 +78,9 @@ export class Gameboard {
   }
 
   allShipsSunk() {
-    if (this.#shipList.length === 0) return false;
+    if (this.shipList.length === 0) return false;
 
-    for (let { ship } of this.#shipList) {
+    for (let { ship } of this.shipList) {
       if (!ship.isSunk()) return false;
     }
 
