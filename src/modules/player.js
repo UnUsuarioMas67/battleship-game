@@ -2,7 +2,7 @@ import { Ship } from "./ship.js";
 import { Gameboard } from "./gameboard.js";
 
 export class Player {
-  gameboard = new Gameboard();
+  #gameboard = new Gameboard();
 
   availableShips = [
     new Ship(5),
@@ -13,10 +13,29 @@ export class Player {
   ];
 
   get placedShips() {
-    return this.gameboard.shipList.map((value) => value.ship);
+    return this.#gameboard.shipList.map((value) => value.ship);
   }
 
-  placeShip() {}
+  placeShip(shipIndex, coords) {
+    if (shipIndex < 0 || shipIndex > 4) return false;
+
+    const ship = this.availableShips[shipIndex];
+    const [x, y] = coords;
+
+    if (this.placedShips.includes(ship)) {
+      return false;
+    }
+
+    try {
+      this.#gameboard.placeShip(ship, x, y);
+    } catch {
+      return false;
+    }
+
+    return true;
+  }
+
+  placeShipsRandom() {}
 
   getBoardCellsData() {}
 }

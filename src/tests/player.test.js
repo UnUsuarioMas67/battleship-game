@@ -1,4 +1,4 @@
-import { test, expect, beforeEach } from "@jest/globals";
+import { test, describe, expect, beforeEach } from "@jest/globals";
 import { Ship } from "../modules/ship.js";
 import { Player } from "../modules/player.js";
 
@@ -8,7 +8,7 @@ beforeEach(() => {
   player = new Player();
 });
 
-test("availableShips should contain exactly five ships with the expected values", () => {
+test("availableShips contains exactly five ships with the expected values", () => {
   const expected = [
     new Ship(5),
     new Ship(4),
@@ -22,4 +22,39 @@ test("availableShips should contain exactly five ships with the expected values"
     const expectedShip = expected[i];
     expect(receivedShip.length).toBe(expectedShip.length);
   }
+});
+
+describe("Placing ships on gameboard", () => {
+  test("placedShips is initially empty", () => {
+    expect(player.placedShips).toEqual([]);
+  });
+
+  test("can place a ship from the availableShips list", () => {
+    player.placeShip(0, [0, 0]);
+    expect(player.placedShips).toContainEqual(player.availableShips[0]);
+
+    player.placeShip(1, [0, 2]);
+    expect(player.placedShips).toContainEqual(player.availableShips[1]);
+
+    player.placeShip(2, [0, 4]);
+    expect(player.placedShips).toContainEqual(player.availableShips[2]);
+  });
+
+  test("returns true if the ship is successfully placed", () => {
+    expect(player.placeShip(3, [5, 1])).toBe(true);
+  });
+
+  test("returns false if the placement is invalid", () => {
+    expect(player.placeShip(3, [5, -1])).toBe(false);
+  });
+
+  test("doesn't placing the same ship more than once", () => {
+    player.placeShip(0, [0, 0]);
+    expect(player.placeShip(0, [3, 5])).toBe(false);
+  });
+
+  test("doesn't allow indexes outside of range (0-4)", () => {
+    const result = player.placeShip(7, [0, 0]);
+    expect(result).toBe(false);
+  });
 });
