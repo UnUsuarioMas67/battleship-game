@@ -13,7 +13,7 @@ export class Player {
   ];
 
   get placedShips() {
-    return this.#gameboard.shipList.map((value) => value.ship);
+    return this.#gameboard.shipsData.map((value) => value.ship);
   }
 
   placeShip(shipIndex, coords) {

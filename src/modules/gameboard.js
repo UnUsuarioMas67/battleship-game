@@ -1,7 +1,7 @@
 export class Gameboard {
   #size = 10;
 
-  shipList = [];
+  shipsData = [];
   shotsReceived = [];
 
   constructor(size = 10) {
@@ -23,7 +23,7 @@ export class Gameboard {
         throw new Error("Position overlaps with another ship");
     });
 
-    this.shipList.push({ ship, pos: { x, y } });
+    this.shipsData.push({ ship, pos: { x, y } });
   }
 
   isPlacementValid(ship, x, y) {
@@ -40,7 +40,7 @@ export class Gameboard {
   isCellOccupied(x, y) {
     if (!this.#isValidCell(x, y)) return null;
 
-    for (let { ship, pos } of this.shipList) {
+    for (let { ship, pos } of this.shipsData) {
       let result = null;
 
       this.#forEachShipCell(ship, pos.x, pos.y, (px, py) => {
@@ -78,9 +78,9 @@ export class Gameboard {
   }
 
   allShipsSunk() {
-    if (this.shipList.length === 0) return false;
+    if (this.shipsData.length === 0) return false;
 
-    for (let { ship } of this.shipList) {
+    for (let { ship } of this.shipsData) {
       if (!ship.isSunk()) return false;
     }
 

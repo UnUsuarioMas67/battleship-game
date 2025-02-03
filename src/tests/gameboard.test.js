@@ -10,7 +10,7 @@ describe("placeShip()", () => {
     const ship = new Ship(3);
 
     gameboard.placeShip(ship, 3, 5);
-    expect(gameboard.shipList).toContainEqual({
+    expect(gameboard.shipsData).toContainEqual({
       ship: ship,
       pos: { x: 3, y: 5 },
     });
@@ -19,7 +19,7 @@ describe("placeShip()", () => {
   test("works with vertical ships", () => {
     const ship = new Ship(5, true);
     gameboard.placeShip(ship, 0, 2);
-    expect(gameboard.shipList).toContainEqual({
+    expect(gameboard.shipsData).toContainEqual({
       ship: ship,
       pos: { x: 0, y: 2 },
     });
