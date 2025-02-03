@@ -20,14 +20,13 @@ export class Player {
     if (shipIndex < 0 || shipIndex > 4) return false;
 
     const ship = this.availableShips[shipIndex];
-    const [x, y] = coords;
 
     if (this.placedShips.includes(ship)) {
       return false;
     }
 
     try {
-      this.#gameboard.placeShip(ship, x, y);
+      this.#gameboard.placeShip(ship, coords);
     } catch {
       return false;
     }

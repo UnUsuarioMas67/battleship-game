@@ -12,10 +12,12 @@ export class Gameboard {
     return this.#size;
   }
 
-  placeShip(ship, x, y) {
+  placeShip(ship, coords) {
     if (ship.length > this.size) {
       throw new Error("Ship too large");
     }
+
+    const [x, y] = coords;
 
     this.#forEachShipCell(ship, x, y, (px, py) => {
       if (!this.#isValidCell(px, py)) throw new Error("Position is invalid");
