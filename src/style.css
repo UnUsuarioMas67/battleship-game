@@ -1,7 +1,92 @@
+:root {
+  --color-primary: #2ebc59;
+  --color-bg: #2f2f2f;
+  --color-board: white;
+  --color-text: white;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.game {
+  color: var(--color-text);
+  text-align: center;
+}
+
+h1 {
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+}
+
+.boards-container {
+  display: flex;
+  gap: 6rem;
+  margin-bottom: 6rem;
+}
+
+.player h2 {
+  margin-bottom: 2rem;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.cell {
+  height: 48px;
+  width: 48px;
+  border: 1px solid var(--color-board);
+  position: relative;
+}
+
+.gameboard:not(.hide) .cell.occupied,
+.gameboard.hide .cell.occupied.cell.attacked {
+  background-color: var(--color-primary);
+}
+
+.gameboard .cell.attacked::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  content: "";
+
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-board);
+  border-radius: 50%;
+}
+
+.gameboard.clickable.hide .cell:not(.attacked):hover,
+.gameboard.clickable .cell:not(.occupied):not(.attacked):hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+button {
+  font-size: 16px;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+button:hover {
+  filter: brightness(90%);
 }
