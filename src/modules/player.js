@@ -36,5 +36,7 @@ export class Player {
 
   placeShipsRandom() {}
 
-  getBoardCellsData() {}
+  getBoardMap() {
+    return this.#gameboard.getMap();
+  }
 }
