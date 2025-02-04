@@ -107,6 +107,23 @@ export class Gameboard {
     return true;
   }
 
+  getMap() {
+    const cells = new Map();
+
+    for (let y = 0; y < this.size; y++) {
+      for (let x = 0; x < this.size; x++) {
+        const data = {
+          ship: this.isCellOccupied([x, y]),
+          isShot: this.isCellAttacked([x, y]),
+        };
+
+        cells.set(`${x}, ${y}`, data);
+      }
+    }
+
+    return cells;
+  }
+
   #isValidCell(coords) {
     const [x, y] = coords;
     const validX = x >= 0 && x < this.#size;

@@ -219,3 +219,72 @@ describe("allShipsSunk()", () => {
     expect(gameboard.allShipsSunk()).toBe(false);
   });
 });
+
+describe.only("getMap()", () => {
+  test("returns a map containing the cell data", () => {
+    const map = gameboard.getMap();
+
+    expect(map.get("0, 0")).toEqual({ ship: null, isShot: false });
+    expect(map.get("4, 7")).toEqual({ ship: null, isShot: false });
+    expect(map.get("9, 9")).toEqual({ ship: null, isShot: false });
+  });
+
+  describe("works with placed ships", () => {
+    const ship = new Ship(3);
+
+    test("horizontal ships", () => {
+      gameboard.placeShip(ship, [0, 0]);
+
+      const map = gameboard.getMap();
+      expect(map.get("0, 0")).toEqual({ ship, isShot: false });
+      expect(map.get("1, 0")).toEqual({ ship, isShot: false });
+      expect(map.get("2, 0")).toEqual({ ship, isShot: false });
+    });
+
+    test("vertical ships", () => {
+      gameboard.placeShip(ship, [0, 0], true);
+
+      const map = gameboard.getMap();
+      expect(map.get("0, 0")).toEqual({ ship, isShot: false });
+      expect(map.get("0, 1")).toEqual({ ship, isShot: false });
+      expect(map.get("0, 2")).toEqual({ ship, isShot: false });
+    });
+  });
+
+  test("works with attacks", () => {
+    gameboard.receiveAttack([0, 0]);
+    gameboard.receiveAttack([9, 9]);
+
+    const map = gameboard.getMap();
+    expect(map.get("0, 0")).toEqual({ ship: null, isShot: true });
+    expect(map.get("9, 9")).toEqual({ ship: null, isShot: true });
+  });
+
+  test("works with attacks on ships", () => {
+    const ship = new Ship(3);
+
+    gameboard.placeShip(ship, [1, 3]);
+
+    gameboard.receiveAttack([1, 3]);
+    gameboard.receiveAttack([2, 3]);
+    gameboard.receiveAttack([2, 4]);
+
+    const map = gameboard.getMap();
+    expect(map.get("1, 3")).toEqual({ ship, isShot: true });
+    expect(map.get("2, 3")).toEqual({ ship, isShot: true });
+    expect(map.get("3, 3")).toEqual({ ship, isShot: false });
+    expect(map.get("2, 4")).toEqual({ ship: null, isShot: true });
+  });
+
+  test("entries are in expected order when iterated through", () => {
+    const map = gameboard.getMap();
+    const iterator = map.keys();
+
+    for (let y = 0; y < gameboard.size; y++) {
+      for (let x = 0; x < gameboard.size; x++) {
+        const key = iterator.next().value;
+        expect(key).toBe(`${x}, ${y}`);
+      }
+    }
+  });
+});
