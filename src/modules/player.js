@@ -21,7 +21,7 @@ export class Player {
 
     const ship = this.availableShips[shipIndex];
 
-    if (this.placedShips.includes(ship)) {
+    if (!this.#gameboard.isPlacementValid(ship, coords, vertical)) {
       return false;
     }
 
