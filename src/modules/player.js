@@ -40,6 +40,18 @@ export class Player {
     }
   }
 
+  receiveAttack(coords) {
+    if (!this.#gameboard.isAttackValid(coords)) return false;
+
+    try {
+      this.#gameboard.receiveAttack(coords);
+    } catch {
+      return false;
+    }
+
+    return true;
+  }
+
   getBoardMap() {
     return this.#gameboard.getMap();
   }

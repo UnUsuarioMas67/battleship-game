@@ -68,3 +68,42 @@ test("placeShipRandom: places all available ships on the gameboard", () => {
     expect(player.placedShips).toContain(ship);
   }
 });
+
+describe("recieveAttack()", () => {
+  test("attacks the given coordinates", () => {
+    const attackCoords = [
+      [0, 0],
+      [5, 5],
+      [7, 6],
+    ];
+    attackCoords.forEach((c) => player.receiveAttack(c));
+
+    const map = player.getBoardMap();
+    attackCoords.forEach((c) => {
+      const value = map.get(c.join(","));
+      expect(value.isShot).toBe(true);
+    });
+  });
+
+  test("doesn't throw if the coordinates are invalid", () => {
+    const attackCoords = [
+      [4, 4],
+      [6, -7],
+      [4, 4], // duplicate coordinates are also invalid
+    ];
+
+    attackCoords.forEach((c) => {
+      expect(() => player.receiveAttack(c)).not.toThrow();
+    });
+  });
+
+  test("returns true if the coordinates are valid", () => {
+    expect(player.receiveAttack([1, 1])).toBe(true);
+  });
+
+  test("returns false if the coordinates are invalid", () => {
+    expect(player.receiveAttack([1, 1])).toBe(true);
+    expect(player.receiveAttack([1, 1])).toBe(false); // duplicate coordinates are also invalid
+    expect(player.receiveAttack([-1, -1])).toBe(false);
+  });
+});
