@@ -91,6 +91,8 @@ describe("placeShipRandom()", () => {
 
       if (!gameboard.shipsData.find((data) => data.ship === ship)) break;
     }
+
+    console.log(gameboard.shipsData);
   });
 });
 
