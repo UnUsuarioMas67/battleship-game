@@ -34,7 +34,11 @@ export class Player {
     return true;
   }
 
-  placeShipsRandom() {}
+  placeShipsRandom() {
+    for (let ship of this.availableShips) {
+      this.#gameboard.placeShipRandom(ship);
+    }
+  }
 
   getBoardMap() {
     return this.#gameboard.getMap();

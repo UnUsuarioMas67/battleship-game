@@ -58,3 +58,10 @@ describe("placeShip() & placedShips", () => {
     expect(result).toBe(false);
   });
 });
+
+test("placeShipRandom: places all available ships on the gameboard", () => {
+  player.placeShipsRandom();
+  for (let ship of player.availableShips) {
+    expect(player.placedShips).toContain(ship);
+  }
+});
