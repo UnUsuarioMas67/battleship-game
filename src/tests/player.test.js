@@ -8,7 +8,7 @@ beforeEach(() => {
   player = new Player();
 });
 
-test("availableShips contains exactly five ships with the expected values", () => {
+test("availableShips: contains exactly five ships with the expected values", () => {
   const expected = [
     new Ship(5),
     new Ship(4),
@@ -24,8 +24,8 @@ test("availableShips contains exactly five ships with the expected values", () =
   }
 });
 
-describe("Placing ships on gameboard", () => {
-  test("placedShips is initially empty", () => {
+describe("placeShip() & placedShips", () => {
+  test("placedShips: is initially empty", () => {
     expect(player.placedShips).toEqual([]);
   });
 
