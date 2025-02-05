@@ -17,6 +17,9 @@ export class Gameboard {
       throw new Error("Ship too large");
     }
 
+    if (this.shipsData.some((data) => data.ship === ship))
+      throw new Error("Ship is already placed");
+
     this.#forCellsInRange(
       (cellCoords) => {
         if (!this.#isValidCell(cellCoords))
@@ -32,7 +35,7 @@ export class Gameboard {
     this.shipsData.push({ ship, coords, vertical });
   }
 
-  isPlacementValid(ship, coords, vertical) {
+  isPlacementValid(ship, coords, vertical = false) {
     let result = true;
 
     this.#forCellsInRange(

@@ -65,6 +65,14 @@ describe("placeShip()", () => {
     const ship = new Ship(11);
     expect(() => gameboard.placeShip(ship, [0, 7])).toThrow("Ship too large");
   });
+
+  test("doesn't allow to place the same ship twice", () => {
+    const ship = new Ship(4);
+    gameboard.placeShip(ship, [0, 7]);
+    expect(() => gameboard.placeShip(ship, [2, 5], true)).toThrow(
+      "Ship is already placed",
+    );
+  });
 });
 
 describe("isPlacementValid()", () => {
@@ -96,6 +104,12 @@ describe("isPlacementValid()", () => {
   test("returns false if the ship's length is larger than the board's size", () => {
     const ship = new Ship(11);
     expect(gameboard.isPlacementValid(ship, [0, 7])).toBe(false);
+  });
+
+  test("doesn't allow to place the same ship twice", () => {
+    const ship = new Ship(4);
+    gameboard.placeShip(ship, [0, 7]);
+    expect(gameboard.isPlacementValid(ship, [2, 5], true)).toBe(false);
   });
 });
 
@@ -220,7 +234,7 @@ describe("allShipsSunk()", () => {
   });
 });
 
-describe.only("getMap()", () => {
+describe("getMap()", () => {
   test("returns a map containing the cell data", () => {
     const map = gameboard.getMap();
 
