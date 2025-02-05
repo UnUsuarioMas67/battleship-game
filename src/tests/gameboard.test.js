@@ -278,9 +278,9 @@ describe("getMap()", () => {
   test("returns a map containing the cell data", () => {
     const map = gameboard.getMap();
 
-    expect(map.get("0, 0")).toEqual({ ship: null, isShot: false });
-    expect(map.get("4, 7")).toEqual({ ship: null, isShot: false });
-    expect(map.get("9, 9")).toEqual({ ship: null, isShot: false });
+    expect(map.get("0,0")).toEqual({ ship: null, isShot: false });
+    expect(map.get("4,7")).toEqual({ ship: null, isShot: false });
+    expect(map.get("9,9")).toEqual({ ship: null, isShot: false });
   });
 
   describe("works with placed ships", () => {
@@ -290,18 +290,18 @@ describe("getMap()", () => {
       gameboard.placeShip(ship, [0, 0]);
 
       const map = gameboard.getMap();
-      expect(map.get("0, 0")).toEqual({ ship, isShot: false });
-      expect(map.get("1, 0")).toEqual({ ship, isShot: false });
-      expect(map.get("2, 0")).toEqual({ ship, isShot: false });
+      expect(map.get("0,0")).toEqual({ ship, isShot: false });
+      expect(map.get("1,0")).toEqual({ ship, isShot: false });
+      expect(map.get("2,0")).toEqual({ ship, isShot: false });
     });
 
     test("vertical ships", () => {
       gameboard.placeShip(ship, [0, 0], true);
 
       const map = gameboard.getMap();
-      expect(map.get("0, 0")).toEqual({ ship, isShot: false });
-      expect(map.get("0, 1")).toEqual({ ship, isShot: false });
-      expect(map.get("0, 2")).toEqual({ ship, isShot: false });
+      expect(map.get("0,0")).toEqual({ ship, isShot: false });
+      expect(map.get("0,1")).toEqual({ ship, isShot: false });
+      expect(map.get("0,2")).toEqual({ ship, isShot: false });
     });
   });
 
@@ -310,8 +310,8 @@ describe("getMap()", () => {
     gameboard.receiveAttack([9, 9]);
 
     const map = gameboard.getMap();
-    expect(map.get("0, 0")).toEqual({ ship: null, isShot: true });
-    expect(map.get("9, 9")).toEqual({ ship: null, isShot: true });
+    expect(map.get("0,0")).toEqual({ ship: null, isShot: true });
+    expect(map.get("9,9")).toEqual({ ship: null, isShot: true });
   });
 
   test("works with attacks on ships", () => {
@@ -324,10 +324,10 @@ describe("getMap()", () => {
     gameboard.receiveAttack([2, 4]);
 
     const map = gameboard.getMap();
-    expect(map.get("1, 3")).toEqual({ ship, isShot: true });
-    expect(map.get("2, 3")).toEqual({ ship, isShot: true });
-    expect(map.get("3, 3")).toEqual({ ship, isShot: false });
-    expect(map.get("2, 4")).toEqual({ ship: null, isShot: true });
+    expect(map.get("1,3")).toEqual({ ship, isShot: true });
+    expect(map.get("2,3")).toEqual({ ship, isShot: true });
+    expect(map.get("3,3")).toEqual({ ship, isShot: false });
+    expect(map.get("2,4")).toEqual({ ship: null, isShot: true });
   });
 
   test("entries are in expected order when iterated through", () => {
@@ -337,7 +337,7 @@ describe("getMap()", () => {
     for (let y = 0; y < gameboard.size; y++) {
       for (let x = 0; x < gameboard.size; x++) {
         const key = iterator.next().value;
-        expect(key).toBe(`${x}, ${y}`);
+        expect(key).toBe(`${x},${y}`);
       }
     }
   });

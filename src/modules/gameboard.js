@@ -150,7 +150,7 @@ export class Gameboard {
           isShot: this.isCellAttacked([x, y]),
         };
 
-        cells.set(`${x}, ${y}`, data);
+        cells.set(`${x},${y}`, data);
       }
     }
 
