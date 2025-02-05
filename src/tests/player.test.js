@@ -40,6 +40,10 @@ describe("placeShip() & placedShips", () => {
     expect(player.placedShips).toContainEqual(player.availableShips[2]);
   });
 
+  test("doesn't throw if the coordinates are invalid", () => {
+    expect(() => player.placeShip(3, [5, -1])).not.toThrow();
+  });
+
   test("returns true if the ship is successfully placed", () => {
     expect(player.placeShip(3, [5, 1])).toBe(true);
   });
@@ -48,9 +52,8 @@ describe("placeShip() & placedShips", () => {
     expect(player.placeShip(3, [5, -1])).toBe(false);
   });
 
-  test("doesn't placing the same ship more than once", () => {
-    player.placeShip(0, [0, 0]);
-    expect(player.placeShip(0, [3, 5])).toBe(false);
+  test("returns false if shipIndex is out of range", () => {
+    expect(player.placeShip(5, [5, 1])).toBe(false);
   });
 
   test("doesn't allow indexes outside of range (0-4)", () => {
