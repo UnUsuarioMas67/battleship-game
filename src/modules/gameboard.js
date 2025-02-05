@@ -35,6 +35,30 @@ export class Gameboard {
     this.shipsData.push({ ship, coords, vertical });
   }
 
+  placeShipRandom(ship) {
+    const availableSpots = this.#findAvailableSpots(ship);
+    if (availableSpots.length === 0) return;
+
+    const index = Math.floor(Math.random() * availableSpots.length);
+    const { coords, vertical } = availableSpots[index];
+    this.placeShip(ship, coords, vertical);
+  }
+
+  #findAvailableSpots(ship) {
+    const result = [];
+
+    for (let x = 0; x < this.size; x++) {
+      for (let y = 0; y < this.size; y++) {
+        if (this.isPlacementValid(ship, [x, y], false))
+          result.push({ coords: [x, y], vertical: false });
+        if (this.isPlacementValid(ship, [x, y], true))
+          result.push({ coords: [x, y], vertical: true });
+      }
+    }
+
+    return result;
+  }
+
   isPlacementValid(ship, coords, vertical = false) {
     let result = true;
 
@@ -80,7 +104,7 @@ export class Gameboard {
     if (this.isCellAttacked(coords))
       throw new Error("Attempted to hit the same coordinate twice");
 
-    if (!this.#isValidCell(coords)) return;
+    if (!this.#isValidCell(coords)) return; // TODO - Change this to throw an error instead
 
     const ship = this.isCellOccupied(coords);
     if (ship) ship.hit();

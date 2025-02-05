@@ -75,6 +75,25 @@ describe("placeShip()", () => {
   });
 });
 
+describe("placeShipRandom()", () => {
+  test("places a ship on a random position of the board", () => {
+    const ship = new Ship(4);
+    gameboard.placeShipRandom(ship);
+    expect(
+      gameboard.shipsData.find((data) => data.ship === ship),
+    ).not.toBeUndefined();
+  });
+
+  test("doesn't get stuck if it can't find a spot to place the ship", () => {
+    for (let i = 0; i <= 20; i++) {
+      const ship = new Ship(5);
+      gameboard.placeShipRandom(ship);
+
+      if (!gameboard.shipsData.find((data) => data.ship === ship)) break;
+    }
+  });
+});
+
 describe("isPlacementValid()", () => {
   test("returns true is the placement is legal", () => {
     const ship = new Ship(3);
