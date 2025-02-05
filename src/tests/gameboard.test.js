@@ -232,6 +232,25 @@ describe("receiveAttack()", () => {
   });
 });
 
+describe("isAttackValid()", () => {
+  test("returns true if the attack is valid", () => {
+    expect(gameboard.isAttackValid([0, 0])).toBe(true);
+
+    expect(gameboard.isAttackValid([3, 3])).toBe(true);
+
+    expect(gameboard.isAttackValid([6, 6])).toBe(true);
+  });
+
+  test("retuns false on repeated coordinates", () => {
+    gameboard.receiveAttack([3, 8]);
+    expect(gameboard.isAttackValid([3, 8])).toBe(false);
+  });
+
+  test("returns false on invalid coordinates", () => {
+    expect(gameboard.isAttackValid([-3, 8])).toBe(false);
+  });
+});
+
 describe("allShipsSunk()", () => {
   test("returns true if all ships are sunk", () => {
     const ship1 = new Ship(3);

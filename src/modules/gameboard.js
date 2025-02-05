@@ -112,6 +112,12 @@ export class Gameboard {
     this.shotsReceived.push(coords);
   }
 
+  isAttackValid(coords) {
+    if (this.isCellAttacked(coords) || !this.#isValidCell(coords)) return false;
+
+    return true;
+  }
+
   isCellAttacked(coords) {
     const [x, y] = coords;
 
