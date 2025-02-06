@@ -130,7 +130,7 @@ describe("isPlacementValid()", () => {
   test("doesn't allow to place the same ship twice", () => {
     const ship = new Ship(4);
     gameboard.placeShip(ship, [0, 7]);
-    expect(gameboard.isPlacementValid(ship, [2, 5], true)).toBe(false);
+    expect(gameboard.isPlacementValid(ship, [6, 5], true)).toBe(false);
   });
 });
 

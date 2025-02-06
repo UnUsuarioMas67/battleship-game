@@ -60,6 +60,8 @@ export class Gameboard {
   }
 
   isPlacementValid(ship, coords, vertical = false) {
+    if (this.shipsData.some((data) => data.ship === ship)) return false;
+
     let result = true;
 
     this.#forCellsInRange(
