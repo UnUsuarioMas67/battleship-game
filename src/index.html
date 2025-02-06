@@ -12,17 +12,23 @@
     <h1>Battleship Game</h1>
 
     <div class="boards-container">
-      <div id="human-board" class="player">
-        <h2>Player</h2>
+      <div id="human" class="player">
+        <h2>You</h2>
         <div class="gameboard">
         </div>
       </div>
 
-      <div id="computer-board" class="player">
+      <div id="computer" class="player">
         <h2>Computer</h2>
         <div class="gameboard hide clickable">
         </div>
       </div>
+    </div>
+
+    <div id="game-text">
+      <p class="current-turn">Enemy's Turn</p>
+      <br>
+      <p class="status">Status text</p>
     </div>
 
     <button>Start</button>
