@@ -26,6 +26,8 @@ class DOMHelper {
     const gameboard = playerElem.querySelector(`.gameboard`);
     const boardMap = player.getBoardMap();
 
+    gameboard.textContent = "";
+
     for (let [key, value] of boardMap.entries()) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
