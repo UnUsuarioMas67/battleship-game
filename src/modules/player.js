@@ -52,6 +52,10 @@ export class Player {
     return true;
   }
 
+  receiveAttackRandom() {
+    this.#gameboard.receiveAttackRandom();
+  }
+
   getBoardMap() {
     return this.#gameboard.getMap();
   }

@@ -114,6 +114,21 @@ export class Gameboard {
     this.shotsReceived.push(coords.map((value) => parseInt(value)));
   }
 
+  receiveAttackRandom() {
+    const validCoords = [];
+
+    for (let x = 0; x < this.size; x++) {
+      for (let y = 0; y < this.size; y++) {
+        if (this.isAttackValid([x, y])) validCoords.push([x, y]);
+      }
+    }
+
+    if (validCoords.length === 0) return;
+
+    const index = Math.floor(Math.random() * validCoords.length);
+    this.receiveAttack(validCoords[index]);
+  }
+
   isAttackValid(coords) {
     if (this.isCellAttacked(coords) || !this.#isValidCell(coords)) return false;
 

@@ -1,6 +1,8 @@
 import { Player } from "./player.js";
 
 export class GameController {
+  #canPlay = false;
+
   constructor(humanSelector, computerSelector, gameTextSelector) {
     this.humanElem = document.querySelector(humanSelector);
     this.computerElem = document.querySelector(computerSelector);
@@ -20,18 +22,28 @@ export class GameController {
   }
 
   startGame() {
+    if (this.#canPlay) return;
+
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
     this.#updateGameboard();
+    this.#canPlay = true;
   }
 
   playTurn(event) {
+    if (!this.#canPlay) return;
+
     const cell = event.target;
-    if (!cell.classList.contains("attacked")) {
-      const coords = cell.dataset.coords.split(",");
-      this.computer.receiveAttack(coords);
-      this.#updateGameboard();
-    }
+    if (cell.classList.contains("attacked")) return;
+
+    const coords = cell.dataset.coords.split(",");
+    this.computer.receiveAttack(coords);
+    this.#computerPlay();
+    this.#updateGameboard();
+  }
+
+  #computerPlay() {
+    this.human.receiveAttackRandom();
   }
 
   #updateGameboard() {
