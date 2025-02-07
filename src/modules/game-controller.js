@@ -16,6 +16,16 @@ export class GameController {
     this.human = new Player();
     this.computer = new Player();
 
+    this.#updateGameboard();
+  }
+
+  startGame() {
+    this.human.placeShipsRandom();
+    this.computer.placeShipsRandom();
+    this.#updateGameboard();
+  }
+
+  #updateGameboard() {
     this.domManager.renderBoard(this.human, this.humanElem);
     this.domManager.renderBoard(this.computer, this.computerElem);
   }
