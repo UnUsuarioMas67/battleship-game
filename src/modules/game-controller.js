@@ -35,18 +35,16 @@ export class GameController {
   }
 
   #updateGameboard() {
-    this.domManager.renderBoard(this.human, this.humanElem, this);
-    this.domManager.renderBoard(
-      this.computer,
-      this.computerElem,
-      this,
-      this.playTurn,
-    );
+    this.domManager.renderBoard(this.human, this.humanElem);
+    this.domManager.renderBoard(this.computer, this.computerElem, {
+      controller: this,
+      callback: this.playTurn,
+    });
   }
 }
 
 class DOMHelper {
-  renderBoard(player, playerElem, controller, onClick = null) {
+  renderBoard(player, playerElem, onClickParams = null) {
     const gameboard = playerElem.querySelector(`.gameboard`);
     const boardMap = player.getBoardMap();
 
@@ -60,8 +58,11 @@ class DOMHelper {
 
       cell.dataset.coords = key;
 
-      if (onClick && !value.isShot) {
-        cell.addEventListener("click", onClick.bind(controller));
+      if (onClickParams && !value.isShot) {
+        cell.addEventListener(
+          "click",
+          onClickParams.callback.bind(onClickParams.controller),
+        );
       }
 
       gameboard.append(cell);
