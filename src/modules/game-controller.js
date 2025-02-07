@@ -25,14 +25,28 @@ export class GameController {
     this.#updateGameboard();
   }
 
+  playTurn(event) {
+    const cell = event.target;
+    if (!cell.classList.contains("attacked")) {
+      const coords = cell.dataset.coords.split(",");
+      this.computer.receiveAttack(coords);
+      this.#updateGameboard();
+    }
+  }
+
   #updateGameboard() {
-    this.domManager.renderBoard(this.human, this.humanElem);
-    this.domManager.renderBoard(this.computer, this.computerElem);
+    this.domManager.renderBoard(this.human, this.humanElem, this);
+    this.domManager.renderBoard(
+      this.computer,
+      this.computerElem,
+      this,
+      this.playTurn,
+    );
   }
 }
 
 class DOMHelper {
-  renderBoard(player, playerElem) {
+  renderBoard(player, playerElem, controller, onClick = null) {
     const gameboard = playerElem.querySelector(`.gameboard`);
     const boardMap = player.getBoardMap();
 
@@ -45,6 +59,10 @@ class DOMHelper {
       if (value.isShot) cell.classList.add("attacked");
 
       cell.dataset.coords = key;
+
+      if (onClick && !value.isShot) {
+        cell.addEventListener("click", onClick.bind(controller));
+      }
 
       gameboard.append(cell);
     }
