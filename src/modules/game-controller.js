@@ -2,6 +2,7 @@ import { Player } from "./player.js";
 
 export class GameController {
   #playing = false;
+  gameStarted = false;
 
   constructor(humanSelector, computerSelector, gameTextSelector) {
     this.humanElem = document.querySelector(humanSelector);
@@ -22,12 +23,13 @@ export class GameController {
   }
 
   startGame() {
-    if (this.#playing) return;
+    if (this.gameStarted) return;
 
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
     this.#updateAllGameboards();
 
+    this.gameStarted = true;
     this.#setHumanTurn();
   }
 
