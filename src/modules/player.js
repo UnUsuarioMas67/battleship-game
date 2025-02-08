@@ -57,4 +57,8 @@ export class Player {
   getBoardMap() {
     return this.#gameboard.getMap();
   }
+
+  allShipsSunk() {
+    return this.#gameboard.allShipsSunk();
+  }
 }

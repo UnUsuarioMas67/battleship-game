@@ -1,7 +1,7 @@
 import { Player } from "./player.js";
 
 export class GameController {
-  #canPlay = false;
+  #playing = false;
 
   constructor(humanSelector, computerSelector, gameTextSelector) {
     this.humanElem = document.querySelector(humanSelector);
@@ -22,31 +22,62 @@ export class GameController {
   }
 
   startGame() {
-    if (this.#canPlay) return;
+    if (this.#playing) return;
 
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
     this.#updateAllGameboards();
-    this.#canPlay = true;
+    this.#playing = true;
   }
 
   playTurn(event) {
-    if (!this.#canPlay) return;
+    if (!this.#playing) return;
 
     const cell = event.target;
     if (cell.classList.contains("attacked")) return;
 
     const coords = cell.dataset.coords.split(",");
-    this.computer.receiveAttack(
+    const ship = this.computer.receiveAttack(
       coords.map((value) => parseInt(value)),
     );
 
-    this.#computerPlay();
-    this.#updateAllGameboards();
-  }
+    this.#updateComputerGameboard();
+    if (this.computer.allShipsSunk()) {
+      this.statusText.textContent = "You Won";
+      this.#playing = false;
+      return;
+    } else if (ship) {
+      this.statusText.textContent = ship.isSunk()
+        ? "You sunk a ship"
+        : "You hit a ship";
+    } else {
+      this.statusText.textContent = "You missed";
+    }
 
-  #computerPlay() {
-    this.human.receiveAttackRandom();
+    this.#playing = false;
+
+    const promise = new Promise((resolve) => {
+      setTimeout(() => resolve(), 1000);
+    });
+
+    promise.then(() => {
+      const ship = this.human.receiveAttackRandom();
+
+      this.#updateHumanGameboard();
+      if (this.computer.allShipsSunk()) {
+        this.statusText.textContent = "You Lost";
+        this.#playing = false;
+        return;
+      } else if (ship) {
+        this.statusText.textContent = ship.isSunk()
+          ? "Enemy sunk your ships"
+          : "Enemy hit your ship";
+      } else {
+        this.statusText.textContent = "Enemy missed";
+      }
+
+      this.#playing = true;
+    });
   }
 
   #updateAllGameboards() {
