@@ -27,7 +27,8 @@ export class GameController {
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
     this.#updateAllGameboards();
-    this.#playing = true;
+
+    this.#setHumanTurn();
   }
 
   playTurn(event) {
@@ -54,7 +55,7 @@ export class GameController {
       this.statusText.textContent = "You missed";
     }
 
-    this.#playing = false;
+    this.#setComputerTurn();
 
     const promise = new Promise((resolve) => {
       setTimeout(() => resolve(), 1000);
@@ -76,8 +77,18 @@ export class GameController {
         this.statusText.textContent = "Enemy missed";
       }
 
-      this.#playing = true;
+      this.#setHumanTurn();
     });
+  }
+
+  #setHumanTurn() {
+    this.turnIndicator.textContent = "Your turn";
+    this.#playing = true;
+  }
+
+  #setComputerTurn() {
+    this.turnIndicator.textContent = "Enemy turn";
+    this.#playing = false;
   }
 
   #updateAllGameboards() {
