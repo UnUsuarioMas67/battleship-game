@@ -18,7 +18,7 @@ export class GameController {
     this.human = new Player();
     this.computer = new Player();
 
-    this.#updateGameboard();
+    this.#updateAllGameboards();
   }
 
   startGame() {
@@ -26,7 +26,7 @@ export class GameController {
 
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
-    this.#updateGameboard();
+    this.#updateAllGameboards();
     this.#canPlay = true;
   }
 
@@ -42,19 +42,30 @@ export class GameController {
     );
 
     this.#computerPlay();
-    this.#updateGameboard();
+    this.#updateAllGameboards();
   }
 
   #computerPlay() {
     this.human.receiveAttackRandom();
   }
 
-  #updateGameboard() {
+  #updateAllGameboards() {
     this.domManager.renderBoard(this.human, this.humanElem);
     this.domManager.renderBoard(this.computer, this.computerElem, {
       controller: this,
       callback: this.playTurn,
     });
+  }
+
+  #updateComputerGameboard() {
+    this.domManager.renderBoard(this.computer, this.computerElem, {
+      controller: this,
+      callback: this.playTurn,
+    });
+  }
+
+  #updateHumanGameboard() {
+    this.domManager.renderBoard(this.human, this.humanElem);
   }
 }
 
