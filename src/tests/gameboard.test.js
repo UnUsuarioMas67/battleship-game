@@ -230,6 +230,18 @@ describe("receiveAttack()", () => {
 
     expect(ship.isSunk()).toBe(true);
   });
+
+  test("returns the ship if it hits", () => {
+    const ship = new Ship(2);
+    gameboard.placeShip(ship, [0, 0], true);
+    expect(gameboard.receiveAttack([0, 1])).toBe(ship);
+  });
+
+  test("returns null if it doesn't hit any ship", () => {
+    const ship = new Ship(2);
+    gameboard.placeShip(ship, [0, 0], true);
+    expect(gameboard.receiveAttack([5, 0])).toBe(null);
+  });
 });
 
 describe("isAttackValid()", () => {

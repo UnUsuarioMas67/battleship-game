@@ -106,12 +106,13 @@ export class Gameboard {
     if (this.isCellAttacked(coords))
       throw new Error("Attempted to hit the same coordinate twice");
 
-    if (!this.#isValidCell(coords)) return; // TODO - Change this to throw an error instead
+    if (!this.#isValidCell(coords)) return null; // TODO - Change this to throw an error instead
 
     const ship = this.isCellOccupied(coords);
     if (ship) ship.hit();
 
     this.shotsReceived.push(coords);
+    return ship;
   }
 
   receiveAttackRandom() {
@@ -123,10 +124,10 @@ export class Gameboard {
       }
     }
 
-    if (validCoords.length === 0) return;
+    if (validCoords.length === 0) return null;
 
     const index = Math.floor(Math.random() * validCoords.length);
-    this.receiveAttack(validCoords[index]);
+    return this.receiveAttack(validCoords[index]);
   }
 
   isAttackValid(coords) {

@@ -97,13 +97,19 @@ describe("recieveAttack()", () => {
     });
   });
 
-  test("returns true if the coordinates are valid", () => {
-    expect(player.receiveAttack([1, 1])).toBe(true);
+  test("returns the ship it hits", () => {
+    player.placeShip(0, [0, 0], false);
+    expect(player.receiveAttack([2, 0])).toBe(player.availableShips[0]);
   });
 
-  test("returns false if the coordinates are invalid", () => {
-    expect(player.receiveAttack([1, 1])).toBe(true);
-    expect(player.receiveAttack([1, 1])).toBe(false); // duplicate coordinates are also invalid
-    expect(player.receiveAttack([-1, -1])).toBe(false);
+  test("returns null if it doesn't hit any ship", () => {
+    player.placeShip(0, [0, 0], false);
+    expect(player.receiveAttack([0, 2])).toBe(null);
+  });
+
+  test("returns null if the coordinates are invalid", () => {
+    player.receiveAttack([1, 1]);
+    expect(player.receiveAttack([1, 1])).toBe(null); // duplicate coordinates are also invalid
+    expect(player.receiveAttack([-1, -1])).toBe(null);
   });
 });

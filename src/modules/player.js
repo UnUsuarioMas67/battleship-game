@@ -41,19 +41,17 @@ export class Player {
   }
 
   receiveAttack(coords) {
-    if (!this.#gameboard.isAttackValid(coords)) return false;
+    if (!this.#gameboard.isAttackValid(coords)) return null;
 
     try {
-      this.#gameboard.receiveAttack(coords);
+      return this.#gameboard.receiveAttack(coords);
     } catch {
-      return false;
+      return null;
     }
-
-    return true;
   }
 
   receiveAttackRandom() {
-    this.#gameboard.receiveAttackRandom();
+    return this.#gameboard.receiveAttackRandom();
   }
 
   getBoardMap() {
