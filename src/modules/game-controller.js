@@ -37,7 +37,10 @@ export class GameController {
     if (cell.classList.contains("attacked")) return;
 
     const coords = cell.dataset.coords.split(",");
-    this.computer.receiveAttack(coords);
+    this.computer.receiveAttack(
+      coords.map((value) => parseInt(value)),
+    );
+
     this.#computerPlay();
     this.#updateGameboard();
   }

@@ -111,7 +111,7 @@ export class Gameboard {
     const ship = this.isCellOccupied(coords);
     if (ship) ship.hit();
 
-    this.shotsReceived.push(coords.map((value) => parseInt(value)));
+    this.shotsReceived.push(coords);
   }
 
   receiveAttackRandom() {
