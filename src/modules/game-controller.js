@@ -59,11 +59,7 @@ export class GameController {
 
     this.#setComputerTurn();
 
-    const promise = new Promise((resolve) => {
-      setTimeout(() => resolve(), 1000);
-    });
-
-    promise.then(() => {
+    setTimeout(() => {
       const ship = this.human.receiveAttackRandom();
 
       this.#updateHumanGameboard();
@@ -80,7 +76,7 @@ export class GameController {
       }
 
       this.#setHumanTurn();
-    });
+    }, 1000);
   }
 
   #setHumanTurn() {
