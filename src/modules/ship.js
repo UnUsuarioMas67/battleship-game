@@ -1,13 +1,10 @@
 export class Ship {
   #hits = 0;
-  #length;
 
-  constructor(length) {
-    this.#length = length;
-  }
-
-  get length() {
-    return this.#length;
+  constructor(length, name = "Ship", color = "white") {
+    this.length = length;
+    this.name = name;
+    this.color = color; // must be a valid css color
   }
 
   hit() {
@@ -15,6 +12,6 @@ export class Ship {
   }
 
   isSunk() {
-    return this.#hits >= this.#length;
+    return this.#hits >= this.length;
   }
 }
