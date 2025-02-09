@@ -150,7 +150,13 @@ class DOMHelper {
     for (let [key, value] of boardMap.entries()) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      if (value.ship) cell.classList.add("occupied");
+
+      if (value.ship) {
+        cell.classList.add("occupied");
+        if (!gameboard.classList.contains("hide"))
+          cell.style.backgroundColor = value.ship.color;
+      }
+
       if (value.isShot) cell.classList.add("attacked");
 
       cell.dataset.coords = key;

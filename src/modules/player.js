@@ -5,11 +5,11 @@ export class Player {
   #gameboard = new Gameboard();
 
   availableShips = [
-    new Ship(5),
-    new Ship(4),
-    new Ship(3),
-    new Ship(3),
-    new Ship(2),
+    new Ship(5, "Carrier", "indigo"),
+    new Ship(4, "Battleship", "darkolivegreen"),
+    new Ship(3, "Destroyer", "darkred"),
+    new Ship(3, "Submarine", "goldenrod"),
+    new Ship(2, "Patrol Boat", "deepskyblue"),
   ];
 
   get placedShips() {
