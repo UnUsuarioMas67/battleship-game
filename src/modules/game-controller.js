@@ -75,7 +75,9 @@ export class GameController {
       return human ? "You Won" : "Enemy Won";
     }
     if (turnResult.shipSunk) {
-      return human ? "You sank a ship" : "Enemy sank your ship";
+      return human
+        ? `You sank the ${turnResult.attackedShip.name}`
+        : `Enemy sank your ${turnResult.attackedShip.name}`;
     }
     if (turnResult.attackedShip) {
       return human ? "You hit a ship" : "Enemy hit a ship";
