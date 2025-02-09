@@ -2,7 +2,8 @@ import { Player } from "./player.js";
 
 export class GameController {
   #playing = false;
-  gameStarted = false;
+  started = false;
+  ended = false;
 
   constructor(humanSelector, computerSelector, gameTextSelector) {
     this.humanElem = document.querySelector(humanSelector);
@@ -23,7 +24,7 @@ export class GameController {
   }
 
   startGame() {
-    if (this.gameStarted) return;
+    if (this.started) return;
 
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
@@ -40,43 +41,54 @@ export class GameController {
     if (cell.classList.contains("attacked")) return;
 
     const coords = cell.dataset.coords.split(",");
-    const ship = this.computer.receiveAttack(
-      coords.map((value) => parseInt(value)),
-    );
 
+    const turn = new GameTurn(this.computer);
+    const turnResult = turn.play(coords.map((value) => parseInt(value)));
     this.#updateComputerGameboard();
-    if (this.computer.allShipsSunk()) {
-      this.statusText.textContent = "You Won";
-      this.#playing = false;
+    this.statusText.textContent = this.#generateTurnMessage(turnResult);
+
+    if (turnResult.noShipsLeft) {
+      this.ended = true;
       return;
-    } else if (ship) {
-      this.statusText.textContent = ship.isSunk()
-        ? "You sunk a ship"
-        : "You hit a ship";
-    } else {
-      this.statusText.textContent = "You missed";
     }
 
     this.#setComputerTurn();
 
     setTimeout(() => {
-      const ship = this.human.receiveAttackRandom();
-
+      const turn = new GameTurn(this.human);
+      const turnResult = turn.play();
       this.#updateHumanGameboard();
-      if (this.computer.allShipsSunk()) {
-        this.statusText.textContent = "You Lost";
-        this.#playing = false;
+      this.statusText.textContent = this.#generateTurnMessage(
+        turnResult,
+        false,
+      );
+
+      if (turnResult.noShipsLeft) {
+        this.ended = true;
         return;
-      } else if (ship) {
-        this.statusText.textContent = ship.isSunk()
-          ? "Enemy sunk your ships"
-          : "Enemy hit your ship";
-      } else {
-        this.statusText.textContent = "Enemy missed";
       }
 
       this.#setHumanTurn();
     }, 1000);
+  }
+
+  #generateTurnMessage(turnResult, human = true) {
+    if (turnResult.noShipsLeft) {
+      return human ? "You Won" : "Enemy Won";
+    }
+    if (turnResult.shipSunk) {
+      return human ? "You sank a ship" : "Enemy sank your ship";
+    }
+    if (turnResult.attackedShip) {
+      return human ? "You hit a ship" : "Enemy hit a ship";
+    }
+
+    const randNumber = Math.floor(Math.random() * 15); // Random number between 0 and 15
+    if (randNumber < 1) {
+      return human ? "You hit a bunch of water" : "Enemy hit a fist, maybe";
+    }
+
+    return human ? "You missed" : "Enemy missed";
   }
 
   #setHumanTurn() {
@@ -106,6 +118,29 @@ export class GameController {
 
   #updateHumanGameboard() {
     this.domManager.renderBoard(this.human, this.humanElem);
+  }
+}
+
+class GameTurn {
+  constructor(targetPlayer) {
+    this.targetPlayer = targetPlayer;
+  }
+
+  play(coords = null) {
+    let attackedShip;
+
+    if (coords) attackedShip = this.targetPlayer.receiveAttack(coords);
+    else attackedShip = this.targetPlayer.receiveAttackRandom();
+
+    return new GameTurnResult(this.targetPlayer, attackedShip);
+  }
+}
+
+class GameTurnResult {
+  constructor(player, attackedShip) {
+    this.attackedShip = attackedShip;
+    this.shipSunk = !!this.attackedShip && this.attackedShip.isSunk();
+    this.noShipsLeft = player.allShipsSunk();
   }
 }
 
