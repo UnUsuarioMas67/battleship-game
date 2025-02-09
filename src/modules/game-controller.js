@@ -10,10 +10,8 @@ export class GameController {
     this.computerElem = document.querySelector(computerSelector);
 
     const gameTextElem = document.querySelector(gameTextSelector);
-    this.turnIndicator = gameTextElem.querySelector(".current-turn");
     this.statusText = gameTextElem.querySelector(".status");
 
-    this.turnIndicator.textContent = "";
     this.statusText.textContent = "";
 
     this.domManager = new DOMHelper();
@@ -92,12 +90,10 @@ export class GameController {
   }
 
   #setHumanTurn() {
-    this.turnIndicator.textContent = "Your turn";
     this.#playing = true;
   }
 
   #setComputerTurn() {
-    this.turnIndicator.textContent = "Enemy turn";
     this.#playing = false;
   }
 
