@@ -155,7 +155,7 @@ class DOMHelper {
 
       if (value.ship) {
         cell.classList.add("occupied");
-        if (!gameboard.classList.contains("hide"))
+        if (!gameboard.classList.contains("hide") || value.ship.isSunk())
           cell.style.backgroundColor = value.ship.color;
       }
 
