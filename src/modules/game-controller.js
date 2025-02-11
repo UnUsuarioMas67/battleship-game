@@ -12,13 +12,7 @@ export class GameController {
     const gameTextElem = document.querySelector(gameTextSelector);
     this.statusText = gameTextElem.querySelector(".status");
 
-    this.statusText.textContent = "";
-
-    this.domManager = new DOMHelper();
-    this.human = new Player();
-    this.computer = new Player();
-
-    this.#updateAllGameboards();
+    this.#initialize();
   }
 
   startGame() {
@@ -32,7 +26,23 @@ export class GameController {
     this.#setHumanTurn();
   }
 
-  playTurn(event) {
+  reset() {
+    if (this.timeout) clearTimeout(this.timeout);
+
+    this.#initialize();
+  }
+
+  #initialize() {
+    this.statusText.textContent = "";
+
+    this.domManager = new DOMHelper();
+    this.human = new Player();
+    this.computer = new Player();
+
+    this.#updateAllGameboards();
+  }
+
+  #playTurn(event) {
     if (!this.#playing) return;
 
     const cell = event.target;
@@ -52,7 +62,7 @@ export class GameController {
 
     this.#setComputerTurn();
 
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       const turn = new GameTurn(this.human);
       const turnResult = turn.play();
       this.#updateHumanGameboard();
@@ -103,14 +113,14 @@ export class GameController {
     this.domManager.renderBoard(this.human, this.humanElem);
     this.domManager.renderBoard(this.computer, this.computerElem, {
       controller: this,
-      callback: this.playTurn,
+      callback: this.#playTurn,
     });
   }
 
   #updateComputerGameboard() {
     this.domManager.renderBoard(this.computer, this.computerElem, {
       controller: this,
-      callback: this.playTurn,
+      callback: this.#playTurn,
     });
   }
 
