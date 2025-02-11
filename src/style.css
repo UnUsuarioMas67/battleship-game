@@ -50,8 +50,8 @@ h1 {
 .gameboard {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  width: 480px;
-  height: 480px;
+  width: 400px;
+  height: 400px;
 }
 
 .cell {
