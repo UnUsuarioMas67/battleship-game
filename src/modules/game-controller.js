@@ -1,9 +1,8 @@
 import { Player } from "./player.js";
 
 export class GameController {
-  #playing = false;
   started = false;
-  ended = false;
+  #currentTurn = "none";
 
   constructor(humanSelector, computerSelector, gameTextSelector) {
     this.humanElem = document.querySelector(humanSelector);
@@ -15,15 +14,27 @@ export class GameController {
     this.#initialize();
   }
 
+  get currentTurn() {
+    return this.#currentTurn;
+  }
+
+  // options: "human", "computer"
+  set currentTurn(who) {
+    if (who !== "human" && who !== "computer") return;
+
+    this.#currentTurn = who;
+    this.#setHoverEffect(who === "human");
+  }
+
   startGame() {
     if (this.started) return;
 
     this.human.placeShipsRandom();
     this.computer.placeShipsRandom();
-    this.#updateAllGameboards();
+    this.#updateGameboard("both");
 
-    this.gameStarted = true;
-    this.#setHumanTurn();
+    this.started = true;
+    this.currentTurn = "human";
     this.domManager.addMessage("Game Started", this.gameText);
   }
 
@@ -34,53 +45,73 @@ export class GameController {
   }
 
   #initialize() {
+    this.started = false;
+
     this.gameText.textContent = "";
 
     this.human = new Player();
     this.computer = new Player();
 
-    this.#updateAllGameboards();
+    this.#updateGameboard("both");
+    this.#setHoverEffect(false);
   }
 
-  #playTurn(event) {
-    if (!this.#playing) return;
+  #endGame() {
+    this.started = false;
+    this.#setHoverEffect(false);
+  }
+
+  #onCellClick(event) {
+    if (this.currentTurn !== "human" || !this.started) return;
 
     const cell = event.target;
     if (cell.classList.contains("attacked")) return;
 
     const coords = cell.dataset.coords.split(",");
 
-    const turn = new GameTurn(this.computer);
-    const turnResult = turn.play(coords.map((value) => parseInt(value)));
-    this.#updateComputerGameboard();
+    if (
+      this.#playTurn(
+        this.currentTurn,
+        coords.map((value) => parseInt(value)),
+      )
+    ) {
+      this.#endGame();
+      return;
+    }
+
+    this.currentTurn = "computer";
+
+    this.timeout = setTimeout(() => {
+      if (this.#playTurn(this.currentTurn)) {
+        this.#endGame();
+        return;
+      }
+
+      this.currentTurn = "human";
+    }, 1000);
+  }
+
+  // options: "human", "computer"
+  #playTurn(who, coords = null) {
+    let target;
+    if (who === "human") target = this.computer;
+    else if (who === "computer") target = this.human;
+    else return;
+
+    const turn = new GameTurn(target);
+    const turnResult = turn.play(coords);
+
+    this.#updateGameboard(who === "human" ? "computer" : "human");
     this.domManager.addMessage(
-      this.#generateTurnMessage(turnResult),
+      this.#generateTurnMessage(turnResult, who === "human"),
       this.gameText,
     );
 
     if (turnResult.noShipsLeft) {
-      this.ended = true;
-      return;
+      return true;
     }
 
-    this.#setComputerTurn();
-
-    this.timeout = setTimeout(() => {
-      const turn = new GameTurn(this.human);
-      const turnResult = turn.play();
-      this.#updateHumanGameboard();
-      this.domManager.addMessage(
-        this.#generateTurnMessage(turnResult, false),
-        this.gameText,
-      );
-
-      if (turnResult.noShipsLeft) {
-        this.ended = true;
-        return;
-      }
-
-      this.#setHumanTurn();
-    }, 1000);
+    return false;
   }
 
   #generateTurnMessage(turnResult, human = true) {
@@ -104,16 +135,6 @@ export class GameController {
     return human ? "You missed" : "Enemy missed";
   }
 
-  #setHumanTurn() {
-    this.#playing = true;
-    this.#setHoverEffect(true);
-  }
-
-  #setComputerTurn() {
-    this.#playing = false;
-    this.#setHoverEffect(false);
-  }
-
   #setHoverEffect(enabled) {
     const gameboard = this.computerElem.querySelector(".gameboard");
 
@@ -121,23 +142,16 @@ export class GameController {
     else gameboard.classList.remove("clickable");
   }
 
-  #updateAllGameboards() {
-    this.domManager.renderBoard(this.human, this.humanElem);
-    this.domManager.renderBoard(this.computer, this.computerElem, {
-      controller: this,
-      callback: this.#playTurn,
-    });
-  }
+  // options: "human", "computer", "both"
+  #updateGameboard(who) {
+    if (who === "human" || who === "both")
+      this.domManager.renderBoard(this.human, this.humanElem);
 
-  #updateComputerGameboard() {
-    this.domManager.renderBoard(this.computer, this.computerElem, {
-      controller: this,
-      callback: this.#playTurn,
-    });
-  }
-
-  #updateHumanGameboard() {
-    this.domManager.renderBoard(this.human, this.humanElem);
+    if (who === "computer" || who === "both")
+      this.domManager.renderBoard(this.computer, this.computerElem, {
+        controller: this,
+        callback: this.#onCellClick,
+      });
   }
 }
 
