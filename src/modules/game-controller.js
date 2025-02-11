@@ -106,10 +106,19 @@ export class GameController {
 
   #setHumanTurn() {
     this.#playing = true;
+    this.#setHoverEffect(true);
   }
 
   #setComputerTurn() {
     this.#playing = false;
+    this.#setHoverEffect(false);
+  }
+
+  #setHoverEffect(enabled) {
+    const gameboard = this.computerElem.querySelector(".gameboard");
+
+    if (enabled) gameboard.classList.add("clickable");
+    else gameboard.classList.remove("clickable");
   }
 
   #updateAllGameboards() {
