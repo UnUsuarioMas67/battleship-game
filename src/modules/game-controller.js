@@ -10,6 +10,8 @@ export class GameController {
     this.computerElem = document.querySelector(computerSelector);
     this.gameText = document.querySelector(gameTextSelector);
 
+    this.domManager = new DOMHelper();
+
     this.#initialize();
   }
 
@@ -22,7 +24,7 @@ export class GameController {
 
     this.gameStarted = true;
     this.#setHumanTurn();
-    this.#addMessage("Game Started");
+    this.domManager.addMessage("Game Started", this.gameText);
   }
 
   reset() {
@@ -34,7 +36,6 @@ export class GameController {
   #initialize() {
     this.gameText.textContent = "";
 
-    this.domManager = new DOMHelper();
     this.human = new Player();
     this.computer = new Player();
 
@@ -52,7 +53,10 @@ export class GameController {
     const turn = new GameTurn(this.computer);
     const turnResult = turn.play(coords.map((value) => parseInt(value)));
     this.#updateComputerGameboard();
-    this.#addMessage(this.#generateTurnMessage(turnResult));
+    this.domManager.addMessage(
+      this.#generateTurnMessage(turnResult),
+      this.gameText,
+    );
 
     if (turnResult.noShipsLeft) {
       this.ended = true;
@@ -65,7 +69,10 @@ export class GameController {
       const turn = new GameTurn(this.human);
       const turnResult = turn.play();
       this.#updateHumanGameboard();
-      this.#addMessage(this.#generateTurnMessage(turnResult, false));
+      this.domManager.addMessage(
+        this.#generateTurnMessage(turnResult, false),
+        this.gameText,
+      );
 
       if (turnResult.noShipsLeft) {
         this.ended = true;
@@ -95,18 +102,6 @@ export class GameController {
     }
 
     return human ? "You missed" : "Enemy missed";
-  }
-
-  #addMessage(message) {
-    const p = document.createElement("p");
-    p.classList.add("message");
-    p.textContent = message;
-
-    this.gameText.append(p);
-    this.gameText.scrollTo({
-      top: this.gameText.scrollHeight,
-      behavior: "instant",
-    });
   }
 
   #setHumanTurn() {
@@ -190,5 +185,17 @@ class DOMHelper {
 
       gameboard.append(cell);
     }
+  }
+
+  addMessage(message, gameText) {
+    const p = document.createElement("p");
+    p.classList.add("message");
+    p.textContent = message;
+
+    gameText.append(p);
+    gameText.scrollTo({
+      top: gameText.scrollHeight,
+      behavior: "instant",
+    });
   }
 }
