@@ -8,9 +8,7 @@ export class GameController {
   constructor(humanSelector, computerSelector, gameTextSelector) {
     this.humanElem = document.querySelector(humanSelector);
     this.computerElem = document.querySelector(computerSelector);
-
-    const gameTextElem = document.querySelector(gameTextSelector);
-    this.statusText = gameTextElem.querySelector(".status");
+    this.gameText = document.querySelector(gameTextSelector);
 
     this.#initialize();
   }
@@ -24,6 +22,7 @@ export class GameController {
 
     this.gameStarted = true;
     this.#setHumanTurn();
+    this.#addMessage("Game Started");
   }
 
   reset() {
@@ -33,7 +32,7 @@ export class GameController {
   }
 
   #initialize() {
-    this.statusText.textContent = "";
+    this.gameText.textContent = "";
 
     this.domManager = new DOMHelper();
     this.human = new Player();
@@ -53,7 +52,7 @@ export class GameController {
     const turn = new GameTurn(this.computer);
     const turnResult = turn.play(coords.map((value) => parseInt(value)));
     this.#updateComputerGameboard();
-    this.statusText.textContent = this.#generateTurnMessage(turnResult);
+    this.#addMessage(this.#generateTurnMessage(turnResult));
 
     if (turnResult.noShipsLeft) {
       this.ended = true;
@@ -66,10 +65,7 @@ export class GameController {
       const turn = new GameTurn(this.human);
       const turnResult = turn.play();
       this.#updateHumanGameboard();
-      this.statusText.textContent = this.#generateTurnMessage(
-        turnResult,
-        false,
-      );
+      this.#addMessage(this.#generateTurnMessage(turnResult, false));
 
       if (turnResult.noShipsLeft) {
         this.ended = true;
@@ -99,6 +95,18 @@ export class GameController {
     }
 
     return human ? "You missed" : "Enemy missed";
+  }
+
+  #addMessage(message) {
+    const p = document.createElement("p");
+    p.classList.add("message");
+    p.textContent = message;
+
+    this.gameText.append(p);
+    this.gameText.scrollTo({
+      top: this.gameText.scrollHeight,
+      behavior: "instant",
+    });
   }
 
   #setHumanTurn() {

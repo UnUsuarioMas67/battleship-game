@@ -112,11 +112,17 @@ button > svg {
 }
 
 #game-text {
-  height: 4rem;
+  height: 6rem;
+  width: 300px;
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
-.status {
-  font-size: 1.125rem;
+.message {
+  font-size: 0.875rem;
 }
 
 button:not([disabled]):hover {
