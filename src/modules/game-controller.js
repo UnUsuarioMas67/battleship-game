@@ -129,7 +129,7 @@ export class GameController {
 
     const randNumber = Math.floor(Math.random() * 15); // Random number between 0 and 15
     if (randNumber < 1) {
-      return human ? "You hit a bunch of water" : "Enemy hit a fist, maybe";
+      return human ? "You hit a bunch of water" : "Enemy hit a fish, maybe";
     }
 
     return human ? "You missed" : "Enemy missed";
