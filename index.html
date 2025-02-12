@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battleship | The Odin Project</title>
+<script defer src="main.js"></script></head>
+
+<body>
+  <main class="game">
+    <h1>Battleship Game</h1>
+
+    <div class="boards-container">
+      <div id="human" class="player">
+        <h2>You</h2>
+        <div class="gameboard">
+        </div>
+      </div>
+
+      <div id="computer" class="player">
+        <h2>Computer</h2>
+        <div class="gameboard hide clickable">
+        </div>
+      </div>
+    </div>
+
+    <div id="game-text">
+
+    </div>
+
+    <div class="buttons">
+      <button id="start-btn">Start</button>
+      <button id="reset-btn" disabled autocomplete="off">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <title>restore</title>
+          <path
+            d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z" />
+        </svg>
+        Reset
+      </button>
+    </div>
+  </main>
+</body>
+
+</html>
